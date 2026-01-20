@@ -1,7 +1,5 @@
 <?php
-// --- KHÔNG CẦN KẾT NỐI DATABASE ---
-
-// 1. Tạo dữ liệu giả lập cho KPI (Thay vì lấy từ bảng kpi_stats)
+// --- DỮ LIỆU GIẢ LẬP (DUMMY DATA) ---
 $kpi_data = [
     'teus_today' => 12450,
     'ships_count' => 8,
@@ -9,48 +7,12 @@ $kpi_data = [
     'berth_prod' => 55
 ];
 
-// 2. Tạo dữ liệu giả lập cho Danh sách tàu (Thay vì lấy từ bảng ships)
 $ships_list = [
-    [
-        'ship_name' => 'MAERSK HANOI',
-        'voyage_number' => 'MSK-001',
-        'eta' => '2026-01-20 14:00:00',
-        'location' => 'Cầu B1',
-        'shipping_line' => 'Maersk',
-        'status' => 'working'
-    ],
-    [
-        'ship_name' => 'ONE ORPHEUS',
-        'voyage_number' => 'ONE-223',
-        'eta' => '2026-01-20 15:30:00',
-        'location' => 'Phao số 0',
-        'shipping_line' => 'ONE',
-        'status' => 'waiting'
-    ],
-    [
-        'ship_name' => 'CMA CGM ALASKA',
-        'voyage_number' => 'CMA-889',
-        'eta' => '2026-01-20 10:00:00',
-        'location' => 'Cầu B3',
-        'shipping_line' => 'CMA CGM',
-        'status' => 'working'
-    ],
-    [
-        'ship_name' => 'WAN HAI 305',
-        'voyage_number' => 'WH-305',
-        'eta' => '2026-01-20 18:00:00',
-        'location' => 'Biển Đông',
-        'shipping_line' => 'Wan Hai',
-        'status' => 'incoming'
-    ],
-    [
-        'ship_name' => 'EVER GIVEN',
-        'voyage_number' => 'EV-999',
-        'eta' => '2026-01-21 08:00:00',
-        'location' => 'Phao số 1',
-        'shipping_line' => 'Evergreen',
-        'status' => 'incoming'
-    ]
+    ['ship_name' => 'MAERSK HANOI', 'voyage_number' => 'MSK-001', 'eta' => '2026-01-20 14:00:00', 'location' => 'Cầu B1', 'shipping_line' => 'Maersk', 'status' => 'working'],
+    ['ship_name' => 'ONE ORPHEUS', 'voyage_number' => 'ONE-223', 'eta' => '2026-01-20 15:30:00', 'location' => 'Phao số 0', 'shipping_line' => 'ONE', 'status' => 'waiting'],
+    ['ship_name' => 'CMA CGM ALASKA', 'voyage_number' => 'CMA-889', 'eta' => '2026-01-20 10:00:00', 'location' => 'Cầu B3', 'shipping_line' => 'CMA CGM', 'status' => 'working'],
+    ['ship_name' => 'WAN HAI 305', 'voyage_number' => 'WH-305', 'eta' => '2026-01-20 18:00:00', 'location' => 'Biển Đông', 'shipping_line' => 'Wan Hai', 'status' => 'incoming'],
+    ['ship_name' => 'EVER GIVEN', 'voyage_number' => 'EV-999', 'eta' => '2026-01-21 08:00:00', 'location' => 'Phao số 1', 'shipping_line' => 'Evergreen', 'status' => 'incoming']
 ];
 ?>
 
@@ -68,7 +30,7 @@ $ships_list = [
     <div class="container">
         <aside class="sidebar">
             <div class="logo">
-                <i class="fa-solid fa-anchor fa-2x"></i>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5y3_pExT8Jd3OCyqF_yePEDRceVbXOpBe-g&s" alt="SNP Logo" class="logo-img">
                 <div class="logo-text"><span>TỔNG CÔNG TY</span><strong>TÂN CẢNG SÀI GÒN</strong></div>
             </div>
             <div class="user-info">
@@ -138,24 +100,13 @@ $ships_list = [
                             </thead>
                             <tbody>
                                 <?php
-                                // Vòng lặp lấy dữ liệu từ Mảng $ships_list thay vì Database
                                 foreach($ships_list as $row) {
-                                    // Logic màu sắc trạng thái
-                                    $cls = ''; $txt = '';
-                                    if ($row['status'] == 'working') {
-                                        $cls = 'green'; $txt = 'Làm hàng';
-                                    } elseif ($row['status'] == 'waiting') {
-                                        $cls = 'orange'; $txt = 'Chờ cầu';
-                                    } else {
-                                        $cls = 'blue'; $txt = 'Đang đến';
-                                    }
-
-                                    $eta_formatted = date("d/m H:i", strtotime($row['eta']));
-                                    
+                                    $cls = ($row['status']=='working')?'green':(($row['status']=='waiting')?'orange':'blue');
+                                    $txt = ($row['status']=='working')?'Làm hàng':(($row['status']=='waiting')?'Chờ cầu':'Đang đến');
                                     echo "<tr>
                                         <td><strong>{$row['ship_name']}</strong></td>
                                         <td>{$row['voyage_number']}</td>
-                                        <td>{$eta_formatted}</td>
+                                        <td>".date("d/m H:i", strtotime($row['eta']))."</td>
                                         <td>{$row['location']}</td>
                                         <td>{$row['shipping_line']}</td>
                                         <td><span class='badge {$cls}'>{$txt}</span></td>
